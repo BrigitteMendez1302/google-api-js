@@ -1,0 +1,64 @@
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+  /**
+   * Sample JavaScript code for calendar.events.insert
+   * See instructions for running APIs Explorer code samples locally:
+   * https://developers.google.com/explorer-help/guides/code_samples#javascript
+   */
+
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyAu6PEqcKVvXdFwV-EnFKhOMlHVjNrb9Z4");
+    return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    return gapi.client.calendar.events.insert({
+      "calendarId": "primary",
+      "conferenceDataVersion": 1,
+      "sendNotifications": true,
+      "sendUpdates": "all",
+      "resource": {
+        "conferenceData": {
+          "createRequest": {
+            "requestId": "sample123",
+            "conferenceSolutionKey": {
+              "type": "hangoutsMeet"
+            }
+          }
+        },
+        "end": {
+          "dateTime": "2021-06-24T12:43:47.805Z"
+        },
+        "start": {
+          "dateTime": "2021-06-24T06:43:47.805Z"
+        },
+        "anyoneCanAddSelf": true,
+        "description": "reunion de prueba",
+        "attendees": [
+          {
+            "email": "brigittemmendezpastor@gmail.com"
+          }
+        ],
+        "summary": "la reu de open"
+      }
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "437532304249-udd962otmcipe2jau8i1osbljgje1jhh.apps.googleusercontent.com"});
+  });
+</script>
+<button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button onclick="execute()">execute</button>
